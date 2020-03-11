@@ -1,0 +1,97 @@
+<!-- Use this CSS stylesheet to ensure that add-ons styling
+     matches the default Google Docs styles -->
+<link href="https://ssl.gstatic.com/docs/script/css/add-ons.css"
+     rel="stylesheet">
+
+<!-- The sidebar will have a input box and the search button -->
+<div class="sidebar">
+    <table>
+    <thead><td colspan=2>Task Options:</td></thead>
+    <tr>
+        <td>
+            <label for="task_end_date_col">Task Start Date Column: </label>
+        </td>
+        <td>
+            <input type="text" id="task_start_date_col" placeholder="Task Start Date Column..." value = "E" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="task_end_date_col">Task End Date Column: </label>
+        </td>
+        <td>
+            <input type="text" id="task_end_date_col" placeholder="Task Start End Column..."  value = "F" />
+        </td>
+    </tr>
+    </table>
+    
+    <table>
+    <thead><td colspan=2>Calendar Options:</td></thead>
+    <tr>
+        <td>
+            <input type="date" id="start_date" placeholder="Start Date..." value = "2020-03-01" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="date" id="end_date" placeholder="End Date..." value = "2020-06-30" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="border_color">Border Color: </label>
+        </td>
+        <td>
+            <input type="color" id="border_color" value = "black" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="weekday_color">Weekday Color: </label>
+        </td>
+        <td>
+            <input type="color" id="weekday_color" value = "#d9ffcc" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="weekend_color">Weekend Color: </label>
+        </td>
+        <td>
+            <input type="color" id="weekend_color" value = "#ff0000" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="highlight_color">Highlight Color: </label>
+        </td>
+        <td>
+            <input type="color" id="highlight_color" value = "#F1FD53" />
+        </td>
+    </tr>
+    </table>
+    <br/>
+    <br/>
+    <button class="blue" id="reset_sheet">Reset</button>
+    <button class="blue" id="redraw_calendar">Redraw</button>
+</div>
+
+<!-- Load the jQuery library from the Google CDN -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js">
+</script>
+
+<script>
+console.log("Starting Off...");
+ // Attach click handlers after the Sidebar has loaded in Google Docs
+ $(function() {
+   // Use Static Maps to generate an image of the address entered by the user
+   $('#redraw_calendar').click(function() {
+     console.log("Here: ", google.script.run);
+     google.script.run.regenerateProjectHeader();
+     google.script.run.regenerateCalendar();
+   });
+   $('#reset_sheet').click(function() {
+   });
+ });
+</script>
+

@@ -84,6 +84,7 @@ class Tracker {
         }
         calendarView.commit();
 
+        var properties = this.properties;
         var updatedTaskDates = this.sheet.getRange(calendarView.firstRow,
                                                    properties.taskStartDateCol,
                                                    1 + lastRow - firstRow, 2).getValues()
@@ -597,21 +598,20 @@ function getTrackerForSheet(sheet) {
 
 
 function onInstall() {
-  onOpen();
+    onOpen();
 }
 
 function onOpen() {
-//  SpreadsheetApp.getUi()
-//  .createMenu('Project Plan')
-//  .addItem("Refresh Calendar", "regenerateCalendar")
-//  .addToUi();
-  
-  SpreadsheetApp.getUi()
-  .createAddonMenu()
-  .addItem("Show Options", "showSidebar")
-  .addItem("Refresh Calendar", "regenerateCalendar")
-  .addToUi();
-
+//    SpreadsheetApp.getUi()
+//    .createMenu('Project Plan')
+//    .addItem("Refresh Calendar", "regenerateCalendar")
+//    .addToUi();
+    
+    SpreadsheetApp.getUi()
+    .createAddonMenu()
+    .addItem("Show Options", "showSidebar")
+    .addItem("Refresh Calendar", "regenerateCalendar")
+    .addToUi();
 }
 
 /**

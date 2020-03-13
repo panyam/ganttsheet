@@ -8,8 +8,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    """Return a friendly HTTP greeting."""
-    return 'Hello World!'
+    return """
+    <html>
+    <head>
+    <meta name="google-site-verification" content="qjDR1BNq93z_ld7Wpufa1oPKTVOzeDYaI8eeCM0WE30" />
+    <title>Gantt Sheets</title>
+    </head>
+    <body>
+        <center><h1>Gantt Sheets</h1></center>
+    </body>
+    </html>
+    """
 
 
 if __name__ == '__main__':

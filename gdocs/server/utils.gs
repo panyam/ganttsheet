@@ -1,6 +1,34 @@
 
 //////////// Helper utility functions
 
+function loadSheetProperties(sheetId) {
+  var properties = null;
+  var docProps = PropertiesService.getDocumentProperties();
+  var allProperties = docProps.getProperties();
+  Logger.log("All Properties: ", allProperties);
+  for (var key in DefaultProperties) {
+    var sheetKey = sheetId + ":" + key;
+    var value = allProperties[sheetKey] || null; // docProps.getProperty(sheetKey) || null;
+    if (value != null) {
+      value = JSON.parse(value);
+      if (properties == null) properties = {};
+      properties[key] = value || DefaultProperties[key];
+    }
+  }
+  return properties;
+}
+
+function saveSheetProperties(sheetId, newProperties) {
+  var out = {};
+  for (var key in newProperties) {
+    var sheetKey = sheetId + ":" + key;
+    var value = newProperties[key];
+    out[sheetKey] = JSON.stringify(value)
+  }
+  var docProps = PropertiesService.getDocumentProperties();
+  docProps.setProperties(out, false);
+}
+
 function valuesToDateRange(taskStartValue, taskEndValue) {
     var taskStartDate = new Date(taskStartValue);
     var taskEndDate = new Date(taskEndValue);

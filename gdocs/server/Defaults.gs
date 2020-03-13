@@ -5,8 +5,8 @@ var DefaultProperties = {
 
     "borderBGColor": "black",
     "weekdayBGColor": "#d9ffcc",
-    "weekendBGColor": "RED",
-    "highlightBGColor": "YELLOW",
+    "weekendBGColor": "#ff0000",
+    "highlightBGColor": "#FEFE00",
     
     "weekdayLabels": [ "S", "M", "T", "W", "T", "F", "S" ],
     "monthLabels": [ "January", "February", "March", "April", "May", "June", "July", 
@@ -19,7 +19,7 @@ var DefaultProperties = {
     "calendarEndCol": 2,
     "calendarDisplayRow": 1,
     "calendarDisplayCol": 7,
-    "maxDaterangeDays": 180,
+    "maxDaterangeDays": 366,
     
     "projectHeaderRow": 3,
     "projectHeaderCol": 1,

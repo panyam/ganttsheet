@@ -1,22 +1,24 @@
 var TRACKERS_BY_SHEET = {};
 
-var Tracker = function(sheet) {
-    this.sheet = sheet;
-    this.sheetId = sheet.getSheetId();
-    this._calendarView = null;
-    this._daterange = null;
-    this._properties = null;
+class Tracker {
+    constructor(sheet, properties) {
+        this.sheet = sheet;
+        this.sheetId = sheet.getSheetId();
+        this._calendarView = null;
+        this._daterange = null;
+        this._properties = properties || null;
+    }
 
-    this.isDaterangeCell = function(row, col) {
-        var properties = this.properties();
+    isDaterangeCell(row, col) {
+        var properties = this.properties;
         return ((row == properties.calendarStartRow + 1 && col == properties.calendarStartCol) || 
             (row == properties.calendarEndRow + 1 && col == properties.calendarEndCol));
     }
 
-    this.taskRowsInRange = function(row, col, numRows, numCols) {
+    taskRowsInRange(row, col, numRows, numCols) {
         var updatedTaskRows = {}
         var stop = false;
-        var properties = this.properties();
+        var properties = this.properties;
         for (var i = 0;i < numRows && !stop;i++) {
             for (var j = 0;j < numCols && !stop;j++) {
                 var currRow = row + i;
@@ -40,7 +42,7 @@ var Tracker = function(sheet) {
         return updatedTaskRows;
     }
 
-    this.highlightTaskRows = function(updatedTaskRows) {
+    highlightTaskRows(updatedTaskRows) {
         var calendarView = this.calendarView
         if (calendarView == null) return ;
 
@@ -55,7 +57,7 @@ var Tracker = function(sheet) {
         }
         calendarView.commit();
 
-        var properties = this.properties();
+        var properties = this.properties;
         var updatedTaskDates = this.sheet.getRange(calendarView.firstRow,
                                                    properties.taskStartDateCol,
                                                    1 + lastRow - firstRow, 2).getValues()
@@ -69,47 +71,27 @@ var Tracker = function(sheet) {
         calendarView.commit();
     }
 
-    this.getTaskRange = function(row) {
-        var properties = this.properties();
+    getTaskRange(row) {
+        var properties = this.properties;
         var taskStartValue = this.sheet.getRange(row, properties.taskStartDateCol).getValue();
         var taskEndValue = this.sheet.getRange(row, properties.taskEndDateCol).getValue();
         return valuesToDateRange(taskStartValue, taskEndValue);
     }
 
-    this.properties = function() {
+    get properties() {
         if (this._properties == null) {
-            this._properties = {}
-            var docProps = PropertiesService.getDocumentProperties();
-            for (var key in DefaultProperties) {
-                var sheetKey = this.sheetId + ":" + key;
-                var value = docProps.getProperty(sheetKey);
-                if (value || null) {
-                    value = JSON.parse(value);
-                }
-                this._properties[key] = value || DefaultProperties[key];
-            }
+            this._properties = loadSheetProperties(this.sheetId);
+          Logger.log("Loaded Properties: ", this._properties);
         }
         return this._properties;
-    }
-
-    this.saveProperties = function() {
-        var properties = this.properties();
-        out = {};
-        for (var key in DefaultProperties) {
-            var sheetKey = this.sheetId + ":" + key;
-            var value = properties[key];
-            out[key] = JSON.stringify(value)
-        }
-        var docProps = PropertiesService.getDocumentProperties();
-        docProps.setProperties(out);
     }
 
     /**
      * Extracts the calendar date range to be rendered in the given sheet.
      */
-    this.daterange = function() {
+    get daterange() {
         if (this._daterange == null) {
-            var properties = this.properties();
+            var properties = this.properties;
             var calStartValue = this.sheet.getRange(properties.calendarStartRow + 1,
                                                     properties.calendarStartCol).getValue();
             var calEndValue = this.sheet.getRange(properties.calendarEndRow + 1,
@@ -132,10 +114,10 @@ var Tracker = function(sheet) {
         return this._daterange;
     }
 
-    this.calendarView = function() {
+    get calendarView() {
         if (this._calendarView == null) {
-            var properties = this.properties()
-            var daterange = this.daterange()
+            var properties = this.properties;
+            var daterange = this.daterange;
             this._calendarView = new CalendarView(this.sheet,
                                                   properties.calendarDisplayRow,
                                                   properties.calendarDisplayCol,
@@ -145,7 +127,7 @@ var Tracker = function(sheet) {
         return this._calendarView;
     }
 
-    this.redrawCalendar = function() {
+    redrawCalendar() {
         var calendarView = this.calendarView;
         var sheet = this.sheet;
         var lastRow = sheet.getLastRow(); 
@@ -158,11 +140,11 @@ var Tracker = function(sheet) {
         Logger.log("Last Row: " + lastRow, "Calendar: ", calendarView);
         calendarView.clear(lastRow);
 
-        var properties = this.properties();
+        var properties = this.properties;
         var numRows = lastRow - (properties.calendarDisplayRow + 3);
         calendarView.repaint(numRows);
         Logger.log("Repaint Commint Time: ", calendarView.commit());
-        sheet.setColumnWidths(calendarView.startCol, calendarView.daterange().numDays + 3, 20)
+        sheet.setColumnWidths(calendarView.startCol, calendarView.daterange.numDays + 3, 20)
 
         if (numRows > 0) {
             var readtime = 0;
@@ -180,11 +162,20 @@ var Tracker = function(sheet) {
         }
     }
 
-    this.redrawProject = function() {
+    redrawProject(reset_dates) {
         var sheet = this.sheet;
         var lastRow = sheet.getLastRow(); 
-        var properties = this.properties();
-        sheet.getRange(1, 1, 2, 2).setFontWeight("bold").setHorizontalAlignment("center")
+        var properties = this.properties;
+        sheet.getRange(1, 1).setFontWeight("bold").setHorizontalAlignment("center").setValue("Calendar Start");
+        sheet.getRange(1, 2).setFontWeight("bold").setHorizontalAlignment("center").setValue("Calendar End");
+        var startDate = new Date();
+        startDate.setDate(1);
+        var endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + 5);
+        endDate.setDate(endDate.getMonth() == 1 ? 28 : 30);
+        sheet.getRange(2, 1).setHorizontalAlignment("center").setValue(startDate);
+        sheet.getRange(2, 2).setHorizontalAlignment("center").setValue(endDate);
+
         sheet.getRange(properties.projectHeaderRow, properties.projectHeaderCol, 1, 6)
             .setValues([[
                 "Project/Track", "Task", "Owner", "Status", "Start Date", "End Date"
@@ -200,15 +191,64 @@ function getActiveTracker() {
     return getTrackerForSheet(activeSheet);
 }
 
+function removeTrackerForSheet(sheet) {
+    var sheetId = sheet.getSheetId();
+    // SpreadsheetApp.getActiveSpreadsheet().deleteSheet(sheet);
+    // remove all properties for this sheet
+    // remove all properties
+    delete TRACKERS_BY_SHEET[sheetId];
+}
 
 /**
  * Return the Tracker for a particular sheet.
  */
 function getTrackerForSheet(sheet) {
-    var sheetId = sheet.getSheetId();
-    if (!(sheetId in TRACKERS_BY_SHEET)) {
-        TRACKERS_BY_SHEET[sheetId] = new Tracker(sheet);
-    }
+  var sheetId = sheet.getSheetId();
+  if (sheetId in TRACKERS_BY_SHEET) {
     return TRACKERS_BY_SHEET[sheetId];
+  }
+  var properties = loadSheetProperties(sheetId);
+  if (properties == null) {
+    return null;
+  }
+  var newTracker = new Tracker(sheet, properties);
+  TRACKERS_BY_SHEET[sheetId] = newTracker;
+  return newTracker;
+}
+
+function saveTrackerForSheet(sheet, properties) {
+    var sheetId = sheet.getSheetId();
+    var newTracker = getTrackerForSheet(sheet);
+    var isNew = false;
+    if (newTracker == null) {
+        isNew = true;
+        newTracker = new Tracker(sheet);
+        TRACKERS_BY_SHEET[sheetId] = newTracker;
+        saveSheetProperties(sheetId, DefaultProperties);
+    }
+    saveSheetProperties(sheetId, properties);
+    newTracker.redrawProject(isNew)
+    newTracker.redrawCalendar()
+    return newTracker;
+}
+
+/**
+ * Gets the properties of the active sheet.
+ */
+function loadTrackerProperties() {
+  var tracker = getActiveTracker();
+  if (tracker != null) {
+      return tracker.properties;
+  }
+  else {
+    return DefaultProperties;
+  }
+}
+
+function saveActiveTrackerProperties(properties) {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var tracker = saveTrackerForSheet(sheet, properties);
+  Logger.log("TPBS: ", TRACKERS_BY_SHEET);
+  return {'sheet': sheet.getSheetId(), 'properties': tracker.properties};
 }
 

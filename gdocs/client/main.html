@@ -5,11 +5,11 @@
 
 <!-- The sidebar will have a input box and the search button -->
 <div class="sidebar">
+    <h2>Task Options</h2>
     <table>
-    <thead><td colspan=2>Task Options:</td></thead>
     <tr>
         <td>
-            <label for="task_end_date_col">Task Start Date Column: </label>
+            <label for="task_start_date_col">Task Start Date Column: </label>
         </td>
         <td>
             <input type="text" id="task_start_date_col" placeholder="Task Start Date Column..." value = "E" />
@@ -25,16 +25,22 @@
     </tr>
     </table>
     
+    <h2>Calendar Options</h2>
     <table>
-    <thead><td colspan=2>Calendar Options:</td></thead>
     <tr>
         <td>
-            <input type="date" id="start_date" placeholder="Start Date..." value = "2020-03-01" />
+            <label for="calendar_start_date_cell">Calendar Start Date Cell: </label>
+        </td>
+        <td>
+            <input type="TEXT" id="calendar_start_date_cell" placeholder="Calendar Start Date Cell..." value = "A2" />
         </td>
     </tr>
     <tr>
         <td>
-            <input type="date" id="end_date" placeholder="End Date..." value = "2020-06-30" />
+            <label for="calendar_end_date_cell">Calendar End Date Cell: </label>
+        </td>
+        <td>
+            <input type="TEXT" id="calendar_end_date_cell" placeholder="Calendar End Date Cell..." value = "B2" />
         </td>
     </tr>
     <tr>
@@ -50,7 +56,7 @@
             <label for="weekday_color">Weekday Color: </label>
         </td>
         <td>
-            <input type="color" id="weekday_color" value = "#d9ffcc" />
+            <input type="color" id="weekday_color" value = "black" />
         </td>
     </tr>
     <tr>
@@ -58,7 +64,7 @@
             <label for="weekend_color">Weekend Color: </label>
         </td>
         <td>
-            <input type="color" id="weekend_color" value = "#ff0000" />
+            <input type="color" id="weekend_color" value = "black" />
         </td>
     </tr>
     <tr>
@@ -66,14 +72,12 @@
             <label for="highlight_color">Highlight Color: </label>
         </td>
         <td>
-            <input type="color" id="highlight_color" value = "#F1FD53" />
+            <input type="color" id="highlight_color" value = "black" />
         </td>
     </tr>
     </table>
     <br/>
-    <br/>
-    <button class="blue" id="reset_sheet">Reset</button>
-    <button class="blue" id="redraw_calendar">Redraw</button>
+    <button class="blue" id="save_properties">Apply</button>
 </div>
 
 <!-- Load the jQuery library from the Google CDN -->
@@ -81,17 +85,48 @@
 </script>
 
 <script>
-console.log("Starting Off...");
- // Attach click handlers after the Sidebar has loaded in Google Docs
- $(function() {
-   // Use Static Maps to generate an image of the address entered by the user
-   $('#redraw_calendar').click(function() {
-     console.log("Here: ", google.script.run);
-     google.script.run.regenerateProjectHeader();
-     google.script.run.regenerateCalendar();
-   });
-   $('#reset_sheet').click(function() {
-   });
- });
-</script>
 
+   function loadProperties(callback) {
+     google.script.run
+     .withSuccessHandler(function(properties) {
+       console.log("Properties: ", properties);
+       $("#border_color").val(properties.borderBGColor);
+       $("#weekend_color").val(properties.weekendBGColor);
+       $("#weekday_color").val(properties.weekdayBGColor);
+       $("#highlight_color").val(properties.highlightBGColor);
+       $("#task_start_date_col").val(properties.taskStartDateCol);
+       $("#task_end_date_col").val(properties.taskEndDateCol);
+       callback(properties);
+     })
+     .loadTrackerProperties()
+   }
+   
+   
+   function saveProperties(callback) {
+       var newProperties = {
+       "borderBGColor": $("#border_color").val(),
+       "weekendBGColor": $("#weekend_color").val(),
+       "weekdayBGColor": $("#weekday_color").val(),
+       "highlightBGColor": $("#highlight_color").val(),
+       "taskStartDateCol": $("#task_start_date_col").val(),
+       "taskEndDateCol": $("#task_end_date_col").val()
+     };
+     
+     google.script.run
+     .withSuccessHandler(callback)
+     .saveActiveTrackerProperties(newProperties);
+   }
+
+    // Attach click handlers after the Sidebar has loaded in Google Docs
+    $(function() {
+       loadProperties(function(properties) {
+           console.log("Loaded Properties: ", properties);
+           $('#save_properties').click(function() {
+               saveProperties(function(result) {
+                   console.log("Applied Tracker to Sheet: ", result);
+                   google.script.host.close();
+               });
+           });
+       });
+    });
+</script>

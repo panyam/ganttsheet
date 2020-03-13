@@ -227,6 +227,7 @@ function saveTrackerForSheet(sheet, properties) {
         saveSheetProperties(sheetId, DefaultProperties);
     }
     saveSheetProperties(sheetId, properties);
+    newTracker._properties = null;
     newTracker.redrawProject(isNew)
     newTracker.redrawCalendar()
     return newTracker;

@@ -1,10 +1,18 @@
-from flask import Flask
+from flask import request, Flask, Blueprint, render_template, redirect, jsonify
 
 
 # If `entrypoint` is not defined in app.yaml, App Engine will look for an app
 # called `app` in `main.py`.
 app = Flask(__name__)
 
+
+@app.route('/privacypolicy/')
+def privacypolicy():
+    return render_template("privacy.html", 
+                           company_name = "Gantt Sheet",
+                           last_updated_date = "March-16-2020",
+                           retention_period_string = "30 days",
+                           contact_email = "sri.panyam@gmail.com")
 
 @app.route('/')
 def hello():

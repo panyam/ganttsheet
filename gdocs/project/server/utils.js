@@ -5,7 +5,7 @@ function loadSheetProperties(sheetId) {
   var properties = null;
   var docProps = PropertiesService.getDocumentProperties();
   var allProperties = docProps.getProperties();
-  Logger.log("All Properties: ", allProperties);
+  // Logger.log("All Properties: ", allProperties);
   for (var key in DefaultProperties) {
     var sheetKey = sheetId + ":" + key;
     var value = allProperties[sheetKey] || null; // docProps.getProperty(sheetKey) || null;

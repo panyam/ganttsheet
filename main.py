@@ -5,29 +5,27 @@ from flask import request, Flask, Blueprint, render_template, redirect, jsonify
 # called `app` in `main.py`.
 app = Flask(__name__)
 
+def common_properties():
+    return dict(
+        company_name = "Gantt Sheet",
+        gsuite_marketplace_id = "",
+        last_updated_date = "March-16-2020",
+        servers_locations_label = "US",
+        retention_period_string = "30 days",
+        contact_email = "sri.panyam@gmail.com"
+        )
+
+@app.route('/terms-of-service/')
+def tos():
+    return render_template("tos.html", **common_properties())
 
 @app.route('/privacypolicy/')
 def privacypolicy():
-    return render_template("privacy.html", 
-                           company_name = "Gantt Sheet",
-                           last_updated_date = "March-16-2020",
-                           retention_period_string = "30 days",
-                           contact_email = "sri.panyam@gmail.com")
+    return render_template("privacy.html", **common_properties())
 
 @app.route('/')
-def hello():
-    return """
-    <html>
-    <head>
-    <meta name="google-site-verification" content="qjDR1BNq93z_ld7Wpufa1oPKTVOzeDYaI8eeCM0WE30" />
-    <title>Gantt Sheets</title>
-    </head>
-    <body>
-        <center><h1>Gantt Sheets</h1></center>
-    </body>
-    </html>
-    """
-
+def homepage():
+    return render_template("homepage.html", **common_properties())
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App

@@ -3,15 +3,16 @@
 set -e
 
 dist_dir="dist"
-mkdir -p ${dist_dir}
+mkdir -p ${dist_dir}/server
+mkdir -p ${dist_dir}/client
 
 gas () {
-    cp appsscript.json ${dist_dir}
-    cp server/*.js ${dist_dir}
+    cp project/appsscript.json ${dist_dir}
+    cp project/server/*.js ${dist_dir}/server
 }
 
 html () {
-    cp client/*.html ${dist_dir}
+    cp project/client/*.html ${dist_dir}/client
 }
 
 js () {
@@ -24,15 +25,15 @@ css () {
 
 js2 () {
     # wrap bundled js in script tags and rename as html
-    input_file="client/sidebar.js"
-    output_file="${dist_dir}/bundle.min.js.html"
+    input_file="project/client/sidebar.js"
+    output_file="${dist_dir}/client/bundle.min.js.html"
     echo "<script>" > ${output_file}
     browserify -t 'uglifyify' ${input_file} | uglifyjs >> ${output_file}
     echo "</script>" >> ${output_file}
 }
 
 css2 () {
-    output_file="${dist_dir}/styles.html"
+    output_file="${dist_dir}/client/styles.html"
 
     optimizations="optimizeBackground:off;"
     optimizations+="replaceMultipleZeros:off;"

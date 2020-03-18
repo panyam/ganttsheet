@@ -6,12 +6,12 @@ dist_dir="dist"
 mkdir -p ${dist_dir}/server
 mkdir -p ${dist_dir}/client
 
-gas () {
+server () {
     cp project/appsscript.json ${dist_dir}
     cp project/server/*.js ${dist_dir}/server
 }
 
-html () {
+client () {
     cp project/client/*.html ${dist_dir}/client
 }
 
@@ -54,11 +54,8 @@ css2 () {
 }
 
 case "$1" in
-    "gas")    gas;;
-    "js")     js;;
-    "html")   html;;
-    "css")    css;;
-    "static") html && css;;
+    "server")    server;;
+    "client")    client;;
     *)
         echo "invalid command: $1"
         exit 1

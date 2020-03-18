@@ -19,14 +19,13 @@
   },
   "scripts": {
     "clean": "rm -rf dist/*",
-    "build:gas": "./build.sh gas",
-    "build:js": "./build.sh js",
-    "build:static": "./build.sh static",
-    "build": "npm run build:gas && npm run build:js && npm run build:static",
+    "build:server": "./build.sh server",
+    "build:client": "./build.sh client",
+    "build": "npm run build:server && npm run build:client",
     "pull": "cd project ; clasp pull",
     "pushOnly": "cd dist ; clasp push",
-    "push:js": "npm run build:js && npm run pushOnly",
-    "push:gas": "npm run build:gas && npm run pushOnly",
+    "push:client": "npm run build:client && npm run pushOnly",
+    "push:server": "npm run build:server && npm run pushOnly",
     "prepush": "npm run clean && npm run build",
     "push": "npm run pushOnly"
   }

@@ -61,4 +61,3 @@ function rc2name(row, col) {
     }
     return col2name(col) + row;
 }
-

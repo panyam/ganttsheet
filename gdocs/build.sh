@@ -10,7 +10,19 @@ gas () {
     cp server/*.js ${dist_dir}
 }
 
+html () {
+    cp client/*.html ${dist_dir}
+}
+
 js () {
+    echo "JS Done"
+}
+
+css () {
+    echo "CSS Done"
+}
+
+js2 () {
     # wrap bundled js in script tags and rename as html
     input_file="client/sidebar.js"
     output_file="${dist_dir}/bundle.min.js.html"
@@ -19,11 +31,7 @@ js () {
     echo "</script>" >> ${output_file}
 }
 
-html () {
-    cp client/*.html ${dist_dir}
-}
-
-css () {
+css2 () {
     output_file="${dist_dir}/styles.html"
 
     optimizations="optimizeBackground:off;"

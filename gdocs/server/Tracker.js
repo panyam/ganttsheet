@@ -137,7 +137,6 @@ class Tracker {
         }
 
         // update all tasks
-        Logger.log("Last Row: " + lastRow, "Calendar: ", calendarView);
         calendarView.clear(lastRow);
 
         var properties = this.properties;

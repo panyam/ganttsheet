@@ -23,4 +23,3 @@ class DateRange {
         return offsetRange.numDays;
     }
 }
-

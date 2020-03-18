@@ -106,7 +106,8 @@ class CalendarView {
         var calDayOfMonthRow = this.startRow + 2;
         
         var currDate = new Date(this.startDate);
-        var col = 0;
+        Logger.log("Start Date: ", currDate);
+        var col = 1;
         var numColumns = this.numDays;
         var currCol = this.startCol + 1;
         var lastMonthStartCol = currCol;
@@ -186,4 +187,3 @@ class CalendarView {
         .setBackground(this.highlightBGColor);
     }
 }
-

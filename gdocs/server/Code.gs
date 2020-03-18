@@ -78,4 +78,3 @@ function showStartDialog() {
     .setTitle("Gantt Sheet - Options"); // The title shows in the sidebar
   SpreadsheetApp.getUi().showModalDialog(html, "Start Tracker in this Sheet"); // userInterface, title)showSidebar(html);
 }
-

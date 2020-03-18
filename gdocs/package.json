@@ -2,7 +2,7 @@
   "name": "gantt-sheet",
   "version": "0.0.1",
   "repository": "https://github.com/panyam/ganttsheet",
-  "license": "MIT",
+  "license": "APACHE",
   "engines": {
     "node": ">=4.2.0"
   },

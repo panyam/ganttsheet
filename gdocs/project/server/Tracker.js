@@ -36,7 +36,7 @@ class Tracker {
         var firstRow = this.calendarView.firstRow;
         var lastRow = this.sheet.getLastRow();
         Logger.log("LastRow: ", lastRow);
-        for (var k = lastRow;k > firstRow;k--) {
+        for (var k = lastRow;k >= firstRow;k--) {
             updatedTaskRows[k] = true
         }
         return updatedTaskRows;
@@ -61,10 +61,11 @@ class Tracker {
         var updatedTaskDates = this.sheet.getRange(calendarView.firstRow,
                                                    properties.taskStartDateCol,
                                                    1 + lastRow - firstRow, 2).getValues();
-        Logger.log("UTD: ", updatedTaskDates);
+        //Logger.log("FirstRow, UTD: ", firstRow, updatedTaskDates);
         for (var currRow in updatedTaskRows) {
             currRow = parseInt(currRow);
             var rowOffset = currRow - firstRow;
+            //Logger.log("REdrawing row: ", rowOffset)
             var taskRange = valuesToDateRange(updatedTaskDates[rowOffset][0],
                                               updatedTaskDates[rowOffset][1], true);
             calendarView.highlightRange(taskRange, rowOffset);
@@ -137,19 +138,19 @@ class Tracker {
         calendarView.clear(lastRow);
 
         var properties = this.properties;
-        var numRows = lastRow - (properties.calendarDisplayRow + 3);
+        var numRows = 1 + lastRow - properties.calendarDisplayRow
         calendarView.repaint(numRows);
-        Logger.log("Repaint Commint Time: ", calendarView.commit());
-        sheet.setColumnWidths(calendarView.startCol, calendarView.daterange.numDays + 3, 20)
+        Logger.log("LastRow: ", lastRow, "NumRows: ", numRows, "Repaint Commit Time: ", calendarView.commit());
+        sheet.setColumnWidths(calendarView.startCol, calendarView.daterange.numDays + 3, 25)
 
         if (numRows > 0) {
             var readtime = 0;
             var d1 = new Date();
             var taskCells = sheet.getRange(properties.projectHeaderRow + 1,
                                            properties.taskStartDateCol,
-                                           lastRow - properties.projectHeaderRow - 1,
+                                           lastRow - properties.projectHeaderRow,
                                            2).getValues();
-            Logger.log("Num Rows: ", taskCells.length);
+            Logger.log("Num Rows: ", properties.projectHeaderRow, lastRow, taskCells.length);
             for (var i = 0;i < taskCells.length;i++) {
                 var taskRange = valuesToDateRange(taskCells[i][0], taskCells[i][1]);
                 calendarView.highlightRange(taskRange, i);

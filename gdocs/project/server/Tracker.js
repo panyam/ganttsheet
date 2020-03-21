@@ -60,7 +60,8 @@ class Tracker {
         var properties = this.properties;
         var updatedTaskDates = this.sheet.getRange(calendarView.firstRow,
                                                    properties.taskStartDateCol,
-                                                   1 + lastRow - firstRow, 2).getValues()
+                                                   1 + lastRow - firstRow, 2).getValues();
+        // Logger.log("UTD: ", updatedTaskDates);
         for (var currRow in updatedTaskRows) {
             currRow = parseInt(currRow);
             var rowOffset = currRow - firstRow;
@@ -95,12 +96,8 @@ class Tracker {
             var calStartValue = this.sheet.getRange(properties.calendarStartRow + 1,
                                                     properties.calendarStartCol).getValue();
             var calEndValue = this.sheet.getRange(properties.calendarEndRow + 1,
-                                                  properties.calendarEndCol).getValue();
-            var calStartDate = new Date(calStartValue);
-            var calEndDate = new Date(calEndValue);
-            Logger.log("StartVal: " + calStartValue + ", Date: " + calStartDate);
-            Logger.log("EndVal: " + calEndValue + ", Date: " + calEndDate);
-            var daterange = new DateRange(calStartDate, calEndDate);
+                                                  properties.calendarEndCol).getDisplayValue();
+            var daterange = valuesToDateRange(calStartValue, calEndValue, true);
             if (daterange.numDays > properties.maxDaterangeDays) {
                 var ui = SpreadsheetApp.getUi();
                 var result = ui.alert('Invalid date range',
@@ -167,13 +164,25 @@ class Tracker {
         var properties = this.properties;
         sheet.getRange(1, 1).setFontWeight("bold").setHorizontalAlignment("center").setValue("Calendar Start");
         sheet.getRange(1, 2).setFontWeight("bold").setHorizontalAlignment("center").setValue("Calendar End");
+      
         var startDate = new Date();
         startDate.setDate(1);
         var endDate = new Date(startDate);
         endDate.setMonth(endDate.getMonth() + 5);
         endDate.setDate(endDate.getMonth() == 1 ? 28 : 30);
-        sheet.getRange(2, 1).setHorizontalAlignment("center").setValue(startDate);
-        sheet.getRange(2, 2).setHorizontalAlignment("center").setValue(endDate);
+
+        var dateRule = SpreadsheetApp.newDataValidation().requireDate().setAllowInvalid(false).build();
+        sheet.getRange(2, 1)
+        .setHorizontalAlignment("center")
+        .setValue(startDate)
+        .setDataValidation(dateRule)
+        .setNumberFormat("M/d/yy");
+        sheet
+        .getRange(2, 2)
+        .setHorizontalAlignment("center")
+        .setValue(endDate)
+        .setDataValidation(dateRule)
+        .setNumberFormat("M/d/yy");
 
         sheet.getRange(properties.projectHeaderRow, properties.projectHeaderCol, 1, 6)
             .setValues([[

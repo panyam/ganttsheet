@@ -1,6 +1,9 @@
 
 //////////// Helper utility functions
 
+var CURRENT_USER_TZ_OFFSET = new Date().getTimezoneOffset();
+var CALENDAR_TIMEZONE = CalendarApp.getDefaultCalendar().getTimeZone();
+
 function loadSheetProperties(sheetId) {
   var properties = null;
   var docProps = PropertiesService.getDocumentProperties();
@@ -29,12 +32,22 @@ function saveSheetProperties(sheetId, newProperties) {
   docProps.setProperties(out, false);
 }
 
-function valuesToDateRange(taskStartValue, taskEndValue) {
-    var taskStartDate = new Date(taskStartValue);
-    var taskEndDate = new Date(taskEndValue);
-    if (taskStartDate.getTime() !== taskStartDate.getTime()) return null;
-    if (taskEndDate.getTime() !== taskEndDate.getTime()) return null;
-    return new DateRange(taskStartDate, taskEndDate);
+/**
+ * Converts two date values into a date range.
+ */
+function valuesToDateRange(startValue, endValue, log) {
+    var startDate = new Date(startValue);
+    var endDate = new Date(endValue);
+    if (log) {
+      Logger.log("StartVal: ", startValue, ", Date: ", startDate, "UTCString: ", startValue.toUTCString(), "3/5/2020: ", new Date("3/5/2020"));
+      Logger.log("UTC Start D/M/Y: ", startDate.getUTCDay(), startDate.getUTCMonth(), startDate.getUTCFullYear());
+      Logger.log("EndVal: " + endValue + ", Date: " + endDate);
+      Logger.log("User TZO: ",CURRENT_USER_TZ_OFFSET, "CalZone: ", CALENDAR_TIMEZONE);
+      Logger.log("Start/End TZO: ",startDate.getTimezoneOffset(), endDate.getTimezoneOffset());
+    }
+    if (startDate.getTime() !== startDate.getTime()) return null;
+    if (endDate.getTime() !== endDate.getTime()) return null;
+    return new DateRange(startDate, endDate);
 }
 
 function col2name(col) {

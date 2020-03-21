@@ -61,12 +61,12 @@ class Tracker {
         var updatedTaskDates = this.sheet.getRange(calendarView.firstRow,
                                                    properties.taskStartDateCol,
                                                    1 + lastRow - firstRow, 2).getValues();
-        // Logger.log("UTD: ", updatedTaskDates);
+        Logger.log("UTD: ", updatedTaskDates);
         for (var currRow in updatedTaskRows) {
             currRow = parseInt(currRow);
             var rowOffset = currRow - firstRow;
             var taskRange = valuesToDateRange(updatedTaskDates[rowOffset][0],
-                                              updatedTaskDates[rowOffset][1]);
+                                              updatedTaskDates[rowOffset][1], true);
             calendarView.highlightRange(taskRange, rowOffset);
         }
         calendarView.commit();

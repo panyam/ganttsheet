@@ -2,7 +2,7 @@
 //////////// Helper utility functions
 
 var CURRENT_USER_TZ_OFFSET = new Date().getTimezoneOffset();
-var CALENDAR_TIMEZONE = CalendarApp.getDefaultCalendar().getTimeZone();
+var SPREADSHEET_TIMEZONE = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
 
 function loadSheetProperties(sheetId) {
   var properties = null;
@@ -38,11 +38,16 @@ function saveSheetProperties(sheetId, newProperties) {
 function valuesToDateRange(startValue, endValue, log) {
     var startDate = new Date(startValue);
     var endDate = new Date(endValue);
+    startDate = new Date(startDate.toLocaleString("en-US", {timeZone: SPREADSHEET_TIMEZONE}));
+    endDate = new Date(endDate.toLocaleString("en-US", {timeZone: SPREADSHEET_TIMEZONE}));
     if (log) {
-      Logger.log("StartVal: ", startValue, ", Date: ", startDate, "UTCString: ", startValue.toUTCString(), "3/5/2020: ", new Date("3/5/2020"));
+      
+      Logger.log("StartVal: ", startValue, ", Date: ", startDate, 
+                 "ToLocale: ", startDate.toLocaleString("en-US", {timeZone: SPREADSHEET_TIMEZONE}),
+                 "Converted: ", new Date(startDate.toLocaleString("en-US", {timeZone: SPREADSHEET_TIMEZONE})));
       Logger.log("UTC Start D/M/Y: ", startDate.getUTCDay(), startDate.getUTCMonth(), startDate.getUTCFullYear());
       Logger.log("EndVal: " + endValue + ", Date: " + endDate);
-      Logger.log("User TZO: ",CURRENT_USER_TZ_OFFSET, "CalZone: ", CALENDAR_TIMEZONE);
+      Logger.log("User TZO: ",CURRENT_USER_TZ_OFFSET, "CalZone: ", SPREADSHEET_TIMEZONE);
       Logger.log("Start/End TZO: ",startDate.getTimezoneOffset(), endDate.getTimezoneOffset());
     }
     if (startDate.getTime() !== startDate.getTime()) return null;

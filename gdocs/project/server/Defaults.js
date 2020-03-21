@@ -4,9 +4,9 @@ var DefaultProperties = {
     "taskEndDateCol": 6,
 
     "borderBGColor": "black",
-    "weekdayBGColor": "#d9ffcc",
-    "weekendBGColor": "#ff0000",
-    "highlightBGColor": "#FEFE00",
+    "weekdayBGColor": "#ffffff",
+    "weekendBGColor": "#c7c7c7",
+    "highlightBGColor": "#83ba7d",
     
     "weekdayLabels": [ "S", "M", "T", "W", "T", "F", "S" ],
     "monthLabels": [ "January", "February", "March", "April", "May", "June", "July", 
@@ -17,11 +17,11 @@ var DefaultProperties = {
     "calendarStartCol": 1,
     "calendarEndRow": 1,
     "calendarEndCol": 2,
-    "calendarDisplayRow": 1,
+    "calendarDisplayRow": 3,
     "calendarDisplayCol": 7,
     "maxDaterangeDays": 366,
     
-    "projectHeaderRow": 3,
+    "projectHeaderRow": 5,
     "projectHeaderCol": 1,
 }
 

@@ -8,7 +8,8 @@ app = Flask(__name__)
 def common_properties():
     return dict(
         company_name = "Gantt Sheet",
-        gsuite_marketplace_id = "",
+        gsuite_marketplace_id = "712411571237",
+        gsuite_marketplace_url = "https://gsuite.google.com/marketplace/app/gantt_sheet/712411571237",
         last_updated_date = "March-16-2020",
         servers_locations_label = "US",
         retention_period_string = "30 days",

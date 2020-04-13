@@ -2,7 +2,14 @@
 //////////// Helper utility functions
 
 var CURRENT_USER_TZ_OFFSET = new Date().getTimezoneOffset();
-var SPREADSHEET_TIMEZONE = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
+var SPREADSHEET_TIMEZONE = null;
+
+function getSpreadSheetTimeZone() {
+    if (SPREADSHEET_TIMEZONE == null) {
+        SPREADSHEET_TIMEZONE = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
+    }
+    return SPREADSHEET_TIMEZONE;
+}
 
 function loadSheetProperties(sheetId) {
   var properties = null;
@@ -38,16 +45,17 @@ function saveSheetProperties(sheetId, newProperties) {
 function valuesToDateRange(startValue, endValue, log) {
     var startDate = new Date(startValue);
     var endDate = new Date(endValue);
-    startDate = new Date(startDate.toLocaleString("en-US", {timeZone: SPREADSHEET_TIMEZONE}));
-    endDate = new Date(endDate.toLocaleString("en-US", {timeZone: SPREADSHEET_TIMEZONE}));
+    var ssTimeZone = getSpreadSheetTimeZone();
+    startDate = new Date(startDate.toLocaleString("en-US", {timeZone: ssTimeZone}));
+    endDate = new Date(endDate.toLocaleString("en-US", {timeZone: ssTimeZone}));
     if (log) {
       
       Logger.log("StartVal: ", startValue, ", Date: ", startDate, 
-                 "ToLocale: ", startDate.toLocaleString("en-US", {timeZone: SPREADSHEET_TIMEZONE}),
-                 "Converted: ", new Date(startDate.toLocaleString("en-US", {timeZone: SPREADSHEET_TIMEZONE})));
+                 "ToLocale: ", startDate.toLocaleString("en-US", {timeZone: ssTimeZone}),
+                 "Converted: ", new Date(startDate.toLocaleString("en-US", {timeZone: ssTimeZone})));
       Logger.log("UTC Start D/M/Y: ", startDate.getUTCDay(), startDate.getUTCMonth(), startDate.getUTCFullYear());
       Logger.log("EndVal: " + endValue + ", Date: " + endDate);
-      Logger.log("User TZO: ",CURRENT_USER_TZ_OFFSET, "CalZone: ", SPREADSHEET_TIMEZONE);
+      Logger.log("User TZO: ",CURRENT_USER_TZ_OFFSET, "CalZone: ", ssTimeZone);
       Logger.log("Start/End TZO: ",startDate.getTimezoneOffset(), endDate.getTimezoneOffset());
     }
     if (startDate.getTime() !== startDate.getTime()) return null;

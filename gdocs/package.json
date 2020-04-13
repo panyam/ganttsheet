@@ -27,6 +27,7 @@
     "push:client": "npm run build:client && npm run pushOnly",
     "push:server": "npm run build:server && npm run pushOnly",
     "prepush": "npm run clean && npm run build",
-    "push": "npm run pushOnly"
+    "push": "npm run pushOnly",
+    "showscripts": "ls -l .clasp.json* | grep clasp | sed -e 's/.*clasp.json.//g'"
   }
 }

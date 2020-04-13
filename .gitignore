@@ -1,6 +1,7 @@
 !lib/README.md
 node_modules
 .clasp.json
+.clasp.json.*
 *.egg-info
 *.iml
 *.ipr

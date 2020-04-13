@@ -12,9 +12,6 @@ function onOpen() {
 //    .createMenu('Project Plan')
 //    .addItem("Refresh Calendar", "redrawCalendar")
 //    .addToUi();
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var activeSheet = ss.getActiveSheet();
-    Logger.log("Active Sheet: ", activeSheet);
     SpreadsheetApp.getUi()
     .createAddonMenu()
     .addItem("Start", "showStartDialog")

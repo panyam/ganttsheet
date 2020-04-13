@@ -4,14 +4,10 @@ function onChange(e) {
 }
 
 function onInstall(e) {
-    onOpen();
+    onOpen(e);
 }
 
-function onOpen() {
-//    SpreadsheetApp.getUi()
-//    .createMenu('Project Plan')
-//    .addItem("Refresh Calendar", "redrawCalendar")
-//    .addToUi();
+function onOpen(e) {
     SpreadsheetApp.getUi()
     .createAddonMenu()
     .addItem("Start", "showStartDialog")

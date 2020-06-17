@@ -143,7 +143,7 @@ class Tracker {
         Logger.log("LastRow: ", lastRow, "NumRows: ", numRows, "Repaint Commit Time: ", calendarView.commit());
         sheet.setColumnWidths(calendarView.startCol, calendarView.daterange.numDays + 3, 25)
 
-        if (numRows > 0) {
+        if (numRows > 0 && lastRow - properties.projectHeaderRow > 0) {
             var readtime = 0;
             var d1 = new Date();
             var taskCells = sheet.getRange(properties.projectHeaderRow + 1,

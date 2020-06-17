@@ -8,7 +8,7 @@ mkdir -p ${dist_dir}/client
 
 server () {
     cp project/appsscript.json ${dist_dir}
-    cp project/server/*.js ${dist_dir}/server
+    cat project/server/*.js > ${dist_dir}/server/Code.js
 }
 
 client () {

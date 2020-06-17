@@ -17,11 +17,11 @@ var DefaultProperties = {
     "calendarStartCol": 1,
     "calendarEndRow": 1,
     "calendarEndCol": 2,
-    "calendarDisplayRow": 3,
+    "calendarDisplayRow": 1,
     "calendarDisplayCol": 7,
     "maxDaterangeDays": 366,
     
-    "projectHeaderRow": 5,
+    "projectHeaderRow": 3,
     "projectHeaderCol": 1,
 }
 

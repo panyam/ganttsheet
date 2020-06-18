@@ -6,6 +6,7 @@ class DateRange {
     constructor(startDate, endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
+        this.startDate.setHours(0, 0, 0, 0);
         
         this.startingDayOfWeek = startDate.getDay()
         

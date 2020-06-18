@@ -180,12 +180,17 @@ class CalendarView {
         if (startDate <= this.startDate) startDate = this.startDate;
         if (endDate >= this.endDate) endDate = this.endDate;
         
+        var startRow = this.firstRow + rowOffset;
+        var startOffset = this.daterange.offsetForDate(startDate);
+        var endOffset = this.daterange.offsetForDate(endDate);
+        var startCol = 1 + this.startCol + startOffset;
+        var endCol   = 1 + this.startCol + endOffset;
         if (log) {
           Logger.log("Redrawing row: ", rowOffset, range)
+          Logger.log("this.daterange: ", this.daterange);
+          Logger.log("startOffset, endOffset: ", startOffset, endOffset);
+          Logger.log("calStartCol, taskStartRow, taskStartCol, taskEndCol: ", this.startCol, startRow, startCol, endCol);
         }
-        var startRow = this.firstRow + rowOffset;
-        var startCol = 1 + this.startCol + this.daterange.offsetForDate(startDate)
-        var endCol   = 1 + this.startCol + this.daterange.offsetForDate(endDate)
         this.transaction.withRange(new CellRange(startRow, startCol, 1, 1 + endCol - startCol))
         .setBackground(this.highlightBGColor);
     }

@@ -65,8 +65,9 @@ class Tracker {
         for (var currRow in updatedTaskRows) {
             currRow = parseInt(currRow);
             var rowOffset = currRow - firstRow;
-            var taskRange = valuesToDateRange(updatedTaskDates[rowOffset][0], updatedTaskDates[rowOffset][1]);
-            calendarView.highlightRange(taskRange, rowOffset);
+            var logRow = rowOffset == 1;
+            var taskRange = valuesToDateRange(updatedTaskDates[rowOffset][0], updatedTaskDates[rowOffset][1], logRow);
+            calendarView.highlightRange(taskRange, rowOffset, logRow);
         }
         calendarView.commit();
     }

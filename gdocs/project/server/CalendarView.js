@@ -170,16 +170,19 @@ class CalendarView {
         this.transaction = new Transaction();
     }
     
-    highlightRange(range, rowOffset) {
+    highlightRange(range, rowOffset, log) {
         if (range == null || typeof(range) === "undefined") return;
         var startDate = range.startDate;
         var endDate = range.endDate;
-        if (startDate >= endDate) return ;
+        if (startDate > endDate) return ;
         if (startDate > this.endDate) return ;
         if (endDate < this.startDate) return ;
         if (startDate <= this.startDate) startDate = this.startDate;
         if (endDate >= this.endDate) endDate = this.endDate;
         
+        if (log) {
+          Logger.log("Redrawing row: ", rowOffset, range)
+        }
         var startRow = this.firstRow + rowOffset;
         var startCol = 1 + this.startCol + this.daterange.offsetForDate(startDate)
         var endCol   = 1 + this.startCol + this.daterange.offsetForDate(endDate)

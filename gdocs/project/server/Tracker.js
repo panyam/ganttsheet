@@ -65,9 +65,7 @@ class Tracker {
         for (var currRow in updatedTaskRows) {
             currRow = parseInt(currRow);
             var rowOffset = currRow - firstRow;
-            //Logger.log("REdrawing row: ", rowOffset)
-            var taskRange = valuesToDateRange(updatedTaskDates[rowOffset][0],
-                                              updatedTaskDates[rowOffset][1], true);
+            var taskRange = valuesToDateRange(updatedTaskDates[rowOffset][0], updatedTaskDates[rowOffset][1]);
             calendarView.highlightRange(taskRange, rowOffset);
         }
         calendarView.commit();
@@ -98,7 +96,7 @@ class Tracker {
                                                     properties.calendarStartCol).getValue();
             var calEndValue = this.sheet.getRange(properties.calendarEndRow + 1,
                                                   properties.calendarEndCol).getDisplayValue();
-            var daterange = valuesToDateRange(calStartValue, calEndValue, true);
+            var daterange = valuesToDateRange(calStartValue, calEndValue);
             if (daterange.numDays > properties.maxDaterangeDays) {
                 var ui = SpreadsheetApp.getUi();
                 var result = ui.alert('Invalid date range',

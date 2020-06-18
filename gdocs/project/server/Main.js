@@ -30,6 +30,10 @@ function onEdit(e) {
     var numRows = e.range.getNumRows();
     var numCols = e.range.getNumColumns();
     
+    highlightRange(tracker, row, col, numRows, numCols);
+}
+
+function highlightRange(tracker, row, col, numRows, numCols) {
     Logger.log("Curr Row: " + row + ", Curr Col: " + col);
     if (tracker.isDaterangeCell(row, col)) {
         tracker.redrawCalendar();
@@ -39,6 +43,7 @@ function onEdit(e) {
         tracker.highlightTaskRows(updatedTaskRows);
     }
 }
+
 
 function refreshTracker() {
     var tracker = getActiveTracker()

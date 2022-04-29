@@ -1,2 +1,2 @@
 # ganttsheet
-Gant Charts for Google Sheets
+Gantt Charts for Google Sheets
